@@ -5,6 +5,8 @@ from drf_yasg.openapi import Parameter, IN_HEADER
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-u%eb@im+)4m*7e19&nbbft5!4q-oji@btgo8@d*jo24np5$u^i'
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 
 DEBUG = True
 
