@@ -695,15 +695,47 @@ class StudentCreateAPIView(APIView):
             user.delete()
             return Response(student_serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
+
 class StudentGroupsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, student_id):
+        """ Talabaning barcha guruhlarini olish """
         student = get_object_or_404(Student, id=student_id)
         groups = student.group.all()  
         serializer = GroupSerializer(groups, many=True)
         return Response(serializer.data)
 
+    def post(self, request, student_id):
+        """ Talabani yangi guruhga qo‘shish """
+        student = get_object_or_404(Student, id=student_id)
+        group_id = request.data.get("group_id")
+
+        if not group_id:
+            return Response({"error": "group_id is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        group = get_object_or_404(Group, id=group_id)
+        student.group = group  # Asosiy guruh sifatida
+        student.save()
+        student.group.add(group)  # Qo‘shimcha guruh sifatida ham qo‘shiladi
+        
+        return Response({"message": f"Student added to {group.name}"}, status=status.HTTP_201_CREATED)
+
+    def delete(self, request, student_id):
+        """ Talabani guruhdan o‘chirish """
+        student = get_object_or_404(Student, id=student_id)
+        group_id = request.data.get("group_id")
+
+        if not group_id:
+            return Response({"error": "group_id is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        group = get_object_or_404(Group, id=group_id)
+
+        if group in student.group.all():
+            student.group.remove(group)
+            return Response({"message": f"Student removed from {group.name}"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Student is not in this group"}, status=status.HTTP_400_BAD_REQUEST)
 
 class StudentAttendanceListView(generics.ListAPIView):
     serializer_class = AttendanceSerializer

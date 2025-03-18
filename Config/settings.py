@@ -10,7 +10,9 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'yourdomain.com']
+ALLOWED_HOSTS = [    "swagger-1-1pi9.onrender.com",
+    "127.0.0.1",
+    "localhost"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',          
