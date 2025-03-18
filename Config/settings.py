@@ -20,7 +20,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles', 
        
-    'drf_yasg',                      
+    'drf_yasg',
+    'drf_spectacular',                      
     'app_config',   
     'rest_framework',            
     'rest_framework_simplejwt',   
@@ -105,9 +106,10 @@ SWAGGER_SETTINGS = {
             'description': "JWT tokenni `Bearer <your-token>` formatida yuboring",
         }
     },
-    'USE_SESSION_AUTH': False, 
+    'USE_SESSION_AUTH': False,
     'JSON_EDITOR': True,
     'DEFAULT_INFO': 'Config.urls.api_info',
+    'PERSIST_AUTH': True,
 }
 
 SPECTACULAR_SETTINGS = {
@@ -148,7 +150,8 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 100
+    'PAGE_SIZE': 100,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
 }
 
 STATIC_URL = 'static/'
