@@ -14,7 +14,7 @@ from app_auth.serializers import (
 from app_users.models import User
 
 
-class LoginAPIView(APIView): #Foydalanuvchini autentifikatsiya qilish (login)
+class LoginAPIView(APIView):
 
     @swagger_auto_schema(request_body=LoginSerializer)
     def post(self, request):
@@ -23,9 +23,9 @@ class LoginAPIView(APIView): #Foydalanuvchini autentifikatsiya qilish (login)
 
         user = User.objects.filter(phone=phone).first()
 
-        # Agar foydalanuvchi mavjud bo‘lsa va paroli to‘g‘ri bo‘lsa
+
         if user and user.check_password(password):
-            refresh = RefreshToken.for_user(user)  # JWT token generatsiya qilinadi
+            refresh = RefreshToken.for_user(user)  # JWT token is generated
             return Response({
                 "refresh": str(refresh),
                 "access": str(refresh.access_token),
@@ -37,7 +37,7 @@ class LoginAPIView(APIView): #Foydalanuvchini autentifikatsiya qilish (login)
         )
 
 
-class LogoutView(APIView): #Foydalanuvchini tizimdan chiqarish (logout)
+class LogoutView(APIView): 
 
     permission_classes = [IsAuthenticated]
 
@@ -51,7 +51,7 @@ class LogoutView(APIView): #Foydalanuvchini tizimdan chiqarish (logout)
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CurrentUserView(RetrieveAPIView): #Hozirgi autentifikatsiya qilingan foydalanuvchi ma'lumotlarini olish
+class CurrentUserView(RetrieveAPIView): 
 
     serializer_class = MeSerializer
     permission_classes = [IsAuthenticated]
@@ -60,7 +60,7 @@ class CurrentUserView(RetrieveAPIView): #Hozirgi autentifikatsiya qilingan foyda
         return self.request.user
 
 
-class ChangePasswordView(APIView): # Foydalanuvchi parolini yangilash
+class ChangePasswordView(APIView): # Update user password
 
     permission_classes = [IsAuthenticated]
 
@@ -70,14 +70,14 @@ class ChangePasswordView(APIView): # Foydalanuvchi parolini yangilash
         if serializer.is_valid():
             user = request.user
 
-            # Eski parol noto‘g‘ri bo‘lsa
+
             if not user.check_password(serializer.validated_data['old_password']):
                 return Response(
                     {"status": False, "detail": "Your old password is incorrect"},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-            # Yangi parolni saqlash
+
             user.set_password(serializer.validated_data['new_password'])
             user.save()
 
@@ -89,7 +89,7 @@ class ChangePasswordView(APIView): # Foydalanuvchi parolini yangilash
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class VerifyOTPView(APIView): #SMS orqali yuborilgan OTP kodni tasdiqlash
+class VerifyOTPView(APIView):
 
     @swagger_auto_schema(request_body=VerifyOTPSerializer)
     def post(self, request):
@@ -97,7 +97,6 @@ class VerifyOTPView(APIView): #SMS orqali yuborilgan OTP kodni tasdiqlash
         if serializer.is_valid():
             phone = serializer.validated_data['phone']
 
-            # Telefon raqamni kesh ga saqlash
             cache.set(f"verified_{phone}", True, timeout=900)
 
             return Response(
@@ -108,14 +107,14 @@ class VerifyOTPView(APIView): #SMS orqali yuborilgan OTP kodni tasdiqlash
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class SetNewPasswordView(APIView): #Parolni OTP tasdiqlangandan keyin yangilash
+class SetNewPasswordView(APIView): 
 
     @swagger_auto_schema(request_body=SetNewPasswordSerializer)
     def post(self, request):
         serializer = SetNewPasswordSerializer(data=request.data)
         if serializer.is_valid():
             phone = serializer.validated_data['phone']
-            verified = cache.get(f"verified_{phone}")  # OTP tasdiqlanganmi tekshiramiz
+            verified = cache.get(f"verified_{phone}")
 
             if not verified:
                 return Response(

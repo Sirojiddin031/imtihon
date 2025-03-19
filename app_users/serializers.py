@@ -27,7 +27,7 @@ class TeacherSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'cource', 'description')
 
 
-class StudentSerializer(serializers.ModelSerializer): #Talabalar uchun serializer
+class StudentSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:

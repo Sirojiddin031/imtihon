@@ -15,7 +15,7 @@ from app_users.serializers import TeacherSerializer, UserSerializer, StudentSeri
 from app_users.models import Teacher,Student,User,Parent
 
 
-#User
+#User uchun viewslar
 
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
@@ -46,7 +46,7 @@ class UserDeleteView(generics.DestroyAPIView):
     lookup_field = 'id'
     permission_classes = [AdminUser]
 
-#Teacher
+#Teacher uchun viewslar
 class TeacherListView(ListAPIView):
     queryset = Teacher.objects.all()
     serializer_class = TeacherSerializer
@@ -120,7 +120,7 @@ class TeacherGroupsAPIView(APIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-#Student
+#Student uchun joylar.
 class StudentListView(ListAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
@@ -147,7 +147,7 @@ class GetStudentsByIds(APIView):
         student_ids = request.data.get("student_ids", [])
 
         if not student_ids or not isinstance(student_ids, list):
-            return Response({"error": "student_ids ro‘yxati bo‘lishi kerak"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "student_ids must be a list"}, status=status.HTTP_400_BAD_REQUEST)
 
         students = Student.objects.filter(id__in=student_ids)
         serializer = StudentSerializer(students, many=True)
@@ -233,5 +233,13 @@ class ParentViewSet(viewsets.ViewSet):
     def delete_parent(self, request, pk=None):
         parent = get_object_or_404(Parent, pk=pk)
         parent.delete()
-        return Response({'status':True,'detail': 'Parent muaffaqiatli uchirildi'}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'status':True,'detail': 'Parent successfully launched'}, status=status.HTTP_204_NO_CONTENT)
 
+
+
+
+"""
+[Unit]
+Description=Gunicorn 
+
+"""

@@ -13,11 +13,11 @@ from app_common.permissions import AdminUser, AdminOrTeacher
 from app_users.models import Student
 
 
-class StatusViewSet(viewsets.ViewSet): #Status ma'lumotlarini boshqaruvchi ViewSet
+class StatusViewSet(viewsets.ViewSet):
 
     permission_classes = [AdminUser]
 
-    def list(self, request): #Barcha statuslarni ro‘yxat ko‘rinishida chiqaradi
+    def list(self, request):
 
         statuses = Status.objects.all()
         paginator = Pagination()
@@ -25,7 +25,7 @@ class StatusViewSet(viewsets.ViewSet): #Status ma'lumotlarini boshqaruvchi ViewS
         serializer = StatusSerializer(result_page, many=True)
         return Response(serializer.data)
 
-    def retrieve(self, request, pk=None): #Bitta statusni ID bo‘yicha chiqaradi
+    def retrieve(self, request, pk=None):
 
         status_obj = get_object_or_404(Status, pk=pk)
         serializer = StatusSerializer(status_obj)
@@ -33,7 +33,7 @@ class StatusViewSet(viewsets.ViewSet): #Status ma'lumotlarini boshqaruvchi ViewS
 
     @action(detail=False, methods=['post'], url_path='create')
     @swagger_auto_schema(request_body=StatusSerializer)
-    def create_status(self, request): #Yangi status yaratish uchun API
+    def create_status(self, request): 
 
         serializer = StatusSerializer(data=request.data)
         if serializer.is_valid():
@@ -43,7 +43,7 @@ class StatusViewSet(viewsets.ViewSet): #Status ma'lumotlarini boshqaruvchi ViewS
 
     @action(detail=True, methods=['put'], url_path='update')
     @swagger_auto_schema(request_body=StatusSerializer)
-    def update_status(self, request, pk=None): #Mavjud statusni yangilash uchun API
+    def update_status(self, request, pk=None): 
 
         status_obj = get_object_or_404(Status, pk=pk)
         serializer = StatusSerializer(status_obj, data=request.data, partial=True)
@@ -53,18 +53,18 @@ class StatusViewSet(viewsets.ViewSet): #Status ma'lumotlarini boshqaruvchi ViewS
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['delete'], url_path='delete')
-    def delete_status(self, request, pk=None): # Statusni o‘chirish uchun API
+    def delete_status(self, request, pk=None):
 
         status_obj = get_object_or_404(Status, pk=pk)
         status_obj.delete()
         return Response({'status': True, 'detail': 'Status muvaffaqiyatli o‘chirildi'}, status=status.HTTP_204_NO_CONTENT)
 
 
-class AttendanceViewSet(viewsets.ViewSet): #Davomat ma'lumotlarini boshqaruvchi ViewSet
+class AttendanceViewSet(viewsets.ViewSet): 
 
     permission_classes = [AdminOrTeacher]
 
-    def list(self, request): # Barcha davomat yozuvlarini chiqaradi
+    def list(self, request): 
 
         attendances = Attendance.objects.all()
         paginator = Pagination()
@@ -72,15 +72,14 @@ class AttendanceViewSet(viewsets.ViewSet): #Davomat ma'lumotlarini boshqaruvchi 
         serializer = AttendanceSerializer(result_page, many=True)
         return Response(serializer.data)
 
-    def retrieve(self, request, pk=None): #Bitta davomat yozuvini ID bo‘yicha chiqaradi
-
+    def retrieve(self, request, pk=None): 
         attendance = get_object_or_404(Attendance, pk=pk)
         serializer = AttendanceSerializer(attendance)
         return Response(serializer.data)
 
     @action(detail=False, methods=['post'], url_path='create')
     @swagger_auto_schema(request_body=AttendanceSerializer)
-    def create_attendance(self, request): # Yangi davomat yozuvini yaratish uchun API
+    def create_attendance(self, request): 
 
         serializer = AttendanceSerializer(data=request.data)
         if serializer.is_valid():
@@ -90,7 +89,7 @@ class AttendanceViewSet(viewsets.ViewSet): #Davomat ma'lumotlarini boshqaruvchi 
 
     @action(detail=True, methods=['put'], url_path='update')
     @swagger_auto_schema(request_body=AttendanceSerializer)
-    def update_attendance(self, request, pk=None): # Mavjud davomat yozuvini yangilash uchun API
+    def update_attendance(self, request, pk=None):
 
         attendance = get_object_or_404(Attendance, pk=pk)
         serializer = AttendanceSerializer(attendance, data=request.data, partial=True)
@@ -100,22 +99,21 @@ class AttendanceViewSet(viewsets.ViewSet): #Davomat ma'lumotlarini boshqaruvchi 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['delete'], url_path='delete')
-    def delete_attendance(self, request, pk=None): #Davomat yozuvini o‘chirish uchun API
+    def delete_attendance(self, request, pk=None):
 
         attendance = get_object_or_404(Attendance, pk=pk)
         attendance.delete()
         return Response({'status': True, 'detail': 'Davomat muvaffaqiyatli o‘chirildi'}, status=status.HTTP_204_NO_CONTENT)
 
 
-class StudentAttendanceAPIView(APIView): # Talabaning davomat ma'lumotlarini ko‘rish uchun API
+class StudentAttendanceAPIView(APIView): 
 
     permission_classes = [IsAuthenticated]
     pagination_class = Pagination
 
-    def get(self, request, student_id): # Berilgan talabaning davomat statistikasi va foizini qaytaradi
+    def get(self, request, student_id):
         student = get_object_or_404(Student, id=student_id)
 
-        # Talabaning davomat ma’lumotlarini olish
         attendance_records = student.attendance.all().order_by("-date")
         paginator = self.pagination_class()
         result_page = paginator.paginate_queryset(attendance_records, request)
@@ -124,7 +122,6 @@ class StudentAttendanceAPIView(APIView): # Talabaning davomat ma'lumotlarini ko�
         present_count = student.attendance.filter(status="present").count()
         absent_count = student.attendance.filter(status="absent").count()
 
-        # Davomat foizini hisoblash
         attendance_percentage = (present_count / total_classes * 100) if total_classes > 0 else 0
 
         return paginator.get_paginated_response({

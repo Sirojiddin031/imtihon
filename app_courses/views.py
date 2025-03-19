@@ -142,7 +142,7 @@ class GetGroupByIds(APIView):
 
         return Response({"groups": serializer.data}, status=status.HTTP_200_OK)
 
-#Subject
+#dars-subject
 class SubjectViewSet(viewsets.ViewSet):
     permission_classes = [AdminUser]
 
@@ -183,7 +183,7 @@ class SubjectViewSet(viewsets.ViewSet):
         subject.delete()
         return Response({'status':True,'detail': 'Subject muaffaqiyatli uchirildi'}, status=status.HTTP_204_NO_CONTENT)
 
-#course
+#course-kurslar
 class CourseViewSet(viewsets.ViewSet):
     permission_classes = [AdminUser]
 
@@ -224,7 +224,7 @@ class CourseViewSet(viewsets.ViewSet):
         course.delete()
         return Response({'status':True,'detail': 'Cource muaffaqiyatli uchirildi'}, status=status.HTTP_204_NO_CONTENT)
 
-#Table
+#table table
 class TableViewSet(viewsets.ViewSet):
     permission_classes = [AdminUser]
 
@@ -265,7 +265,7 @@ class TableViewSet(viewsets.ViewSet):
         table.delete()
         return Response({'status':True,'detail': 'Table muaffaqiyatli uchirildi'}, status=status.HTTP_204_NO_CONTENT)
 
-#TableType
+#TableType lar
 class TableTypeViewSet(viewsets.ViewSet):
     permission_classes = [AdminUser]
 
@@ -306,7 +306,7 @@ class TableTypeViewSet(viewsets.ViewSet):
         tabletype.delete()
         return Response({'status':True,'detail': 'TableType muaffaqiyatli uchirildi'}, status=status.HTTP_204_NO_CONTENT)
 
-#Homework
+#Homework larni qilish
 class HomeworkViewSet(viewsets.ViewSet):
     permission_classes = [AdminOrTeacher]
 
@@ -348,7 +348,7 @@ class HomeworkViewSet(viewsets.ViewSet):
         homework.delete()
         return Response({'status':True,'detail': 'Homework muaffaqiyatli uchirildi'}, status=status.HTTP_204_NO_CONTENT)
 
-#HomeworkReview
+#HomeworkReview uchun joy
 class HomeworkReviewViewSet(viewsets.ViewSet):
     permission_classes = [AdminOrTeacher]
 
@@ -390,7 +390,7 @@ class HomeworkReviewViewSet(viewsets.ViewSet):
         homeworkreview.delete()
         return Response({'status':True,'detail': 'HomeworkReview muaffaqiyatli uchirildi'}, status=status.HTTP_204_NO_CONTENT)
 
-#HomeworkSubmission
+#HomeworkSubmission qilamiz
 class HomeworkSubmissionViewSet(viewsets.ViewSet):
     permission_classes = [AdminOrStudent]
 

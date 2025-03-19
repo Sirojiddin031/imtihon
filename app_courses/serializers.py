@@ -4,77 +4,77 @@ from app_courses.models import (
     Homework, HomeworkSubmission, HomeworkReview
 )
 
-class GroupSerializer(serializers.ModelSerializer): # Guruh modeli uchun serializer
+class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = '__all__'
 
 
-class GetGroupByIdsSerializer(serializers.Serializer): # Berilgan ID'lar bo'yicha guruhlarni olish uchun serializer
+class GetGroupByIdsSerializer(serializers.Serializer):
     group_ids = serializers.ListField(child=serializers.IntegerField())
 
 
-class SubjectSerializer(serializers.ModelSerializer): # Fan modeli uchun serializer
+class SubjectSerializer(serializers.ModelSerializer): # serializer for fan model
     class Meta:
         model = Subject
         fields = '__all__'
 
 
-class CourseSerializer(serializers.ModelSerializer): # Kurs modeli uchun serializer
+class CourseSerializer(serializers.ModelSerializer): # serializer for  course model
     class Meta:
         model = Course
         fields = '__all__'
 
 
-class TableSerializer(serializers.ModelSerializer): # Jadval modeli uchun serializer
+class TableSerializer(serializers.ModelSerializer): # serializer for ttable model
     class Meta:
         model = Table
         fields = '__all__'
 
 
-class TableTypeSerializer(serializers.ModelSerializer): # Jadval turi modeli uchun serializer
+class TableTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TableType
         fields = '__all__'
 
 
-class HomeworkSerializer(serializers.ModelSerializer): # Uyga vazifa modeli uchun serializer
+class HomeworkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Homework
         fields = '__all__'
-        extra_kwargs = {'teacher': {'read_only': True}}  # O'qituvchi maydonini faqat o'qish uchun qilish
+        extra_kwargs = {'teacher': {'read_only': True}}
 
 
-class HomeworkSubmissionSerializer(serializers.ModelSerializer): # Uyga vazifa topshirish modeli uchun serializer
+class HomeworkSubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = HomeworkSubmission
         fields = '__all__'
         extra_kwargs = {
-            'student': {'read_only': True},  # Talabani faqat o'qish mumkin
-            'is_checked': {'read_only': True}  # Tekshirilgan statusini faqat o'qish mumkin
+            'student': {'read_only': True},
+            'is_checked': {'read_only': True} 
         }
 
 
-class HomeworkReviewSerializer(serializers.ModelSerializer): # Uyga vazifa baholash modeli uchun serializer
+class HomeworkReviewSerializer(serializers.ModelSerializer): # serializer for homework qoshimcha model
     class Meta:
         model = HomeworkReview
         fields = '__all__'
         extra_kwargs = {
-            'teacher': {'read_only': True}  # O'qituvchi maydonini faqat o'qish uchun qilish
+            'teacher': {'read_only': True}  
         }
 
 
-class RemoveStudentFromGroupSerializer(serializers.Serializer): # Guruhdan talabani olib tashlash uchun serializer
+class RemoveStudentFromGroupSerializer(serializers.Serializer): 
     student_id = serializers.IntegerField()
 
 
-class RemoveTeacherFromGroupSerializer(serializers.Serializer): # Guruhdan o‘qituvchini olib tashlash uchun serializer
+class RemoveTeacherFromGroupSerializer(serializers.Serializer): 
     teacher_id = serializers.IntegerField()
 
 
-class GroupAddStudent(serializers.Serializer): # Guruhga talaba qo'shish uchun serializer
+class GroupAddStudent(serializers.Serializer): 
     student_id = serializers.IntegerField()
 
 
-class GroupAddTeacher(serializers.Serializer): # Guruhga o‘qituvchi qo'shish uchun serializer
+class GroupAddTeacher(serializers.Serializer): 
     teacher_id = serializers.IntegerField()

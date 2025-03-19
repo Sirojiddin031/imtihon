@@ -33,7 +33,7 @@ class VerifyOTPSerializer(serializers.Serializer):
         otp = data.get('otp')
         cached_data = cache.get(phone)
         if not cached_data or str(cached_data) != otp:
-            raise serializers.ValidationError("Noto‘g‘ri yoki eskirgan OTP")
+            raise serializers.ValidationError("Invalid or outdated OTP")
         return data
 
 class SetNewPasswordSerializer(serializers.Serializer):
@@ -43,5 +43,5 @@ class SetNewPasswordSerializer(serializers.Serializer):
 
     def validate(self, data):
         if data['new_password'] != data['confirm_password']:
-            raise serializers.ValidationError("Parollar mos kelmadi")
+            raise serializers.ValidationError("Passwords did not match.")
         return data

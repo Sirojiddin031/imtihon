@@ -5,7 +5,7 @@ from app_users.models import Student
 from app_courses.models import Group
 
 
-class Status(BaseModel): #Talabaning davomat holatini bildiruvchi model
+class Status(BaseModel): 
 
     title = models.CharField(max_length=255)
 
@@ -17,19 +17,19 @@ class Status(BaseModel): #Talabaning davomat holatini bildiruvchi model
         verbose_name_plural = 'Statuses'
 
 
-class Attendance(BaseModel): #Talabaning guruhdagi davomatini ifodalovchi model.
+class Attendance(BaseModel): 
 
     group = models.ForeignKey(
-        Group, on_delete=models.CASCADE, related_name='attendance')  # Talabaning qaysi guruhga tegishli ekanligini ko'rsatadi
+        Group, on_delete=models.CASCADE, related_name='attendance')  
 
     student = models.ForeignKey(
-        Student, on_delete=models.CASCADE, related_name='attendance')  # Qaysi talaba ekanligini bildiradi
+        Student, on_delete=models.CASCADE, related_name='attendance')
 
     status = models.ForeignKey(
-        'Status', on_delete=models.CASCADE, related_name='attendance')  # Talabaning holatini bildiradi (Qatnashdi, Kech keldi va h.k.)
+        'Status', on_delete=models.CASCADE, related_name='attendance')
 
     def __str__(self):
-        return f"{self.student.user.phone} - {self.group.title}"  # Talabaning telefon raqami va guruh nomini qaytaradi
+        return f"{self.student.user.phone} - {self.group.title}"
 
     class Meta:
         verbose_name = "Attendance"

@@ -11,7 +11,7 @@ class UserManager(BaseUserManager):
     def create_user(self, phone, password=None, **extra_fields):
 
         if not phone:
-            raise ValueError('Telefon raqami kiritilishi shart')
+            raise ValueError('Phone number is required.')
         user = self.model(phone=phone, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
@@ -23,9 +23,9 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_admin', True)
 
         if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser is_staff=True bo‘lishi kerak.')
+            raise ValueError('Superuser is_staff=True must be.')
         if extra_fields.get('is_admin') is not True:
-            raise ValueError('Superuser is_superuser=True bo‘lishi kerak.')
+            raise ValueError('Superuser is_superuser=True must be.')
 
         return self.create_user(phone, password, **extra_fields)
 
@@ -35,7 +35,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     phone_regex = RegexValidator(
         regex=r'^\+?1?\d{9,14}$',
-        message="Telefon raqami quyidagi formatda bo‘lishi kerak: '9989012345678'. Maksimal 14 ta raqam."
+        message="The phone number must be in the following format: '9989012345678'. Maximum 14 digits."
     )
     phone = models.CharField(validators=[phone_regex], max_length=17, unique=True) 
     full_name = models.CharField(max_length=50, null=True, blank=True)
@@ -64,7 +64,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.is_admin
 
 
-# talabani modelsi
 class Student(BaseModel):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -95,7 +94,6 @@ class Teacher(BaseModel):
         verbose_name_plural = 'Teachers'
 
 
-# Ota-ona modeli
 class Parent(BaseModel):
 
 

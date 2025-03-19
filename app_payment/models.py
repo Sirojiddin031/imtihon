@@ -5,8 +5,8 @@ from app_users.models import Student
 from app_courses.models import Group
 
 
-class Month(BaseModel): # Oylarni saqlash uchun model
-    title = models.CharField(max_length=128)  # Oy nomini saqlovchi maydon
+class Month(BaseModel):
+    title = models.CharField(max_length=128) 
 
     def __str__(self):
         return self.title
@@ -16,8 +16,8 @@ class Month(BaseModel): # Oylarni saqlash uchun model
         verbose_name_plural = 'months'
 
 
-class PaymentType(BaseModel): # To'lov turlarini saqlash uchun model
-    title = models.CharField(max_length=255)  # To‘lov turini saqlovchi maydon
+class PaymentType(BaseModel): # Model for store payments type
+    title = models.CharField(max_length=255)
 
     def __str__(self):
         return self.title
@@ -27,10 +27,10 @@ class PaymentType(BaseModel): # To'lov turlarini saqlash uchun model
         verbose_name_plural = 'payment types'
 
 
-class Payment(BaseModel): # Talabaning to'lovlarini saqlash uchun model
+class Payment(BaseModel): 
     student = models.ForeignKey(
         Student,
-        on_delete=models.CASCADE,  # Agar talaba o‘chirilsa, uning to‘lovlari ham o‘chadi
+        on_delete=models.CASCADE,
         related_name='payment'
     )
 
@@ -43,14 +43,14 @@ class Payment(BaseModel): # Talabaning to'lovlarini saqlash uchun model
 
     month = models.ForeignKey(
         Month,
-        on_delete=models.CASCADE,  # Oy o‘chirilsa, unga tegishli to‘lovlar ham o‘chadi
+        on_delete=models.CASCADE, 
         related_name='payment',
         null=True, blank=True
     )
 
     payment_type = models.ForeignKey(
         PaymentType,
-        on_delete=models.CASCADE,  # To‘lov turi o‘chirilsa, unga tegishli to‘lovlar ham o‘chadi
+        on_delete=models.CASCADE, 
         related_name='payment'
     )
 
